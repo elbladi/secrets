@@ -1,6 +1,7 @@
 # secret
 
-A new Flutter project.
+App to store passwords in locale device.
+No internet connection needed.
 
 ## Getting Started
 
