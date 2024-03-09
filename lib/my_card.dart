@@ -40,7 +40,7 @@ class _CardState extends State<MyCard> {
   }
 
   void _copyToClipboard() {
-    Clipboard.setData(ClipboardData(text: _controller.text)).then((_) {
+    Clipboard.setData(ClipboardData(text: _controller.text.trim())).then((_) {
       ScaffoldMessenger.of(context)
           .hideCurrentSnackBar(reason: SnackBarClosedReason.action);
       ScaffoldMessenger.of(context).showSnackBar(
