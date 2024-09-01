@@ -17,7 +17,7 @@ class QRScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            QrImage(
+            QrImageView(
               data: content,
               version: QrVersions.auto,
               size: 300.0,
