@@ -96,6 +96,7 @@ class _ContentBodyState extends State<ContentBody> {
             valueListenable: getBox.listenable(),
             builder: (context, Box<Account> box, _) {
               List<Account> accounts = List.from(box.values);
+              accounts.sort((a, b) => a.app.compareTo(b.app));
               return ListView.builder(
                   itemCount: accounts.length,
                   itemBuilder: (ctx, i) {
