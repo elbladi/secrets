@@ -6,8 +6,6 @@ import 'package:secret/actions/store.dart';
 import 'package:secret/add_account.dart';
 import 'package:secret/model/accounts.dart';
 import 'package:secret/my_card.dart';
-import 'package:secret/qr_screen.dart';
-import 'package:secret/read_qr.dart';
 import 'package:secret/select_tile.dart';
 
 class ContentBody extends StatefulWidget {
@@ -42,42 +40,26 @@ class _ContentBodyState extends State<ContentBody> {
   Future<bool?> _confirmDelete(BuildContext context, int i, Account acc) async {
     // ignore: avoid_single_cascade_in_expression_statements
     AwesomeDialog(
-        context: context,
-        dialogType: DialogType.QUESTION,
-        headerAnimationLoop: true,
-        animType: AnimType.SCALE,
-        title: 'Eliminar ${acc.app.capitalize()}?',
-        btnOkText: "Ok",
-        btnCancelText: "Cancelar",
-        btnOkOnPress: () async {
-          await removeAcc(i, acc);
-          return true;
-        },
-        btnCancelColor: blueLight,
-        buttonsTextStyle: const TextStyle(
-          fontSize: 15,
-          color: yellowLight,
-        ),
-        btnOkColor: Colors.blue[400],
-        btnCancelOnPress: () {
-          return false;
-        },
-        onDissmissCallback: (type) {})
-      ..show();
-  }
-
-  void _share() async {
-    if (_ids.isNotEmpty) {
-      final content = await generateQR(_ids);
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => QRScreen(content)),
-      );
-    }
-    setState(() {
-      _shareMode = false;
-      _ids = [];
-    });
+      context: context,
+      dialogType: DialogType.question,
+      headerAnimationLoop: true,
+      animType: AnimType.scale,
+      title: 'Eliminar ${acc.app.capitalize()}?',
+      btnOkText: "Ok",
+      btnCancelText: "Cancelar",
+      btnOkOnPress: () async {
+        await removeAcc(i, acc);
+      },
+      btnCancelColor: blueLight,
+      buttonsTextStyle: const TextStyle(
+        fontSize: 15,
+        color: yellowLight,
+      ),
+      onDismissCallback: (type) {},
+      btnOkColor: Colors.blue[400],
+      btnCancelOnPress: () => false,
+    )..show();
+    return null;
   }
 
   void _onSelected(bool add, String id) {
@@ -90,20 +72,7 @@ class _ContentBodyState extends State<ContentBody> {
     setState(() => _ids = temp);
   }
 
-  void _selectAll() {
-    setState(() => _ids = allSelected ? [] : getIds());
-  }
-
   bool get allSelected => loadAccs().length == _ids.length;
-
-  void _readQR() async {
-    final val = await Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => const ReadQR()),
-    );
-    if (val == null) return;
-    await processQR(val as String);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -145,18 +114,6 @@ class _ContentBodyState extends State<ContentBody> {
                   });
             }),
       ),
-      floatingActionButtonLocation:
-          FloatingActionButtonLocation.miniCenterFloat,
-      floatingActionButton: _shareMode
-          ? FloatingActionButton(
-              onPressed: _share,
-              backgroundColor: pinkStrong,
-              child: const Icon(
-                Icons.navigation,
-                color: white,
-              ),
-            )
-          : null,
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: blue1,
         items: <BottomNavigationBarItem>[
@@ -184,11 +141,7 @@ class _ContentBodyState extends State<ContentBody> {
         currentIndex: 1,
         selectedItemColor: pinkStrong,
         onTap: (i) {
-          if (i == 0) {
-            setState(() => _shareMode = !_shareMode);
-          } else if (i == 2) {
-            _shareMode ? _selectAll() : _readQR();
-          } else if (i == 1) {
+          if (i == 1) {
             _showModal(context);
           }
         },

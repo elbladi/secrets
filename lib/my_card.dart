@@ -69,9 +69,9 @@ class _CardState extends State<MyCard> {
       // ignore: avoid_single_cascade_in_expression_statements
       AwesomeDialog(
           context: context,
-          dialogType: DialogType.WARNING,
+          dialogType: DialogType.warning,
           headerAnimationLoop: true,
-          animType: AnimType.SCALE,
+          animType: AnimType.scale,
           title: "¿Guardar cambios?",
           btnOkText: "Ok",
           btnCancelText: "Cancelar",
@@ -91,7 +91,7 @@ class _CardState extends State<MyCard> {
             }
             setState(() => _editable = false);
           },
-          onDissmissCallback: (type) {})
+          onDismissCallback: (type) {})
         ..show();
     }
   }
