@@ -3,15 +3,8 @@ import 'package:secret/actions/colors.dart';
 import 'package:secret/actions/login.dart';
 import 'content_body.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({Key? key}) : super(key: key);
-
-  @override
-  State<LoginScreen> createState() => LloginScreenState();
-}
-
-class LloginScreenState extends State<LoginScreen> {
-  void _initLogin() async {
+class LoginScreen extends StatelessWidget {
+  void _initLogin(BuildContext context) async {
     if (await login()) {
       Navigator.pushReplacement(
         context,
@@ -32,9 +25,26 @@ class LloginScreenState extends State<LoginScreen> {
           ),
         ),
         child: Center(
-          child: InkWell(
-            onTap: _initLogin,
-            child: const Text("🔐", style: TextStyle(fontSize: 30)),
+          child: FutureBuilder(
+            future: canUseBiometrics(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return CircularProgressIndicator(color: Colors.red);
+              }
+
+              if (snapshot.data == null) {
+                return Text("Necesitas habilitar biometricos");
+              }
+
+              bool canUseBiometric = snapshot.data!;
+              if (!canUseBiometric)
+                return Text("Necesitas habilitar biometricos");
+
+              return InkWell(
+                onTap: () => _initLogin(context),
+                child: const Text("🔐", style: TextStyle(fontSize: 30)),
+              );
+            },
           ),
         ),
       ),

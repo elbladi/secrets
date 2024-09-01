@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
           onPrimary: pinkStrong,
         ),
       ),
-      home: const LoginScreen(),
+      home: LoginScreen(),
     );
   }
 }
